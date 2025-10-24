@@ -1,5 +1,16 @@
 import 'dart:math';
 
+/// [includeLowerCase] password include lowercase characther
+///
+/// [includeUpperCase] password include uppercase characther
+///
+/// [includeNumerics] password include numeric characther
+///
+/// [includeSymbols] password include Symbols characther
+///
+/// [length] length for per password
+///
+/// [generateCount] how much password u want
 List<String> passwordGenerator({
   bool includeLowerCase = true,
   bool includeUpperCase = true,
