@@ -38,34 +38,45 @@ List<String> passwordGenerator({
 
   String finalCase = "";
   List<String> retValue = [];
-  var rng = Random();
+  var rng = Random.secure();
   const String lowerCaseLetter = "abcdefghijklmnopqrstuvwxyz";
   const String upperCaseLetter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const String numerics = "0123456789";
   const String symbols = "[]{},./'`~!@#%^&*()_-+";
 
-  if (includeLowerCase) {
-    finalCase += lowerCaseLetter;
-  }
+  if (includeLowerCase) finalCase += lowerCaseLetter;
 
-  if (includeUpperCase) {
-    finalCase += upperCaseLetter;
-  }
+  if (includeUpperCase) finalCase += upperCaseLetter;
 
-  if (includeNumerics) {
-    finalCase += numerics;
-  }
+  if (includeNumerics) finalCase += numerics;
 
-  if (includeSymbols) {
-    finalCase += symbols;
-  }
+  if (includeSymbols) finalCase += symbols;
 
   for (var i = 0; i < generateCount; i++) {
-    var passwordBuffer = StringBuffer();
-    for (var j = 0; j < length; j++) {
-      passwordBuffer.write(finalCase[rng.nextInt(finalCase.length)]);
+    List<String> passwordChars = [];
+
+    if (includeLowerCase) {
+      passwordChars.add(lowerCaseLetter[rng.nextInt(lowerCaseLetter.length)]);
     }
-    retValue.add(passwordBuffer.toString());
+    if (includeUpperCase) {
+      passwordChars.add(upperCaseLetter[rng.nextInt(upperCaseLetter.length)]);
+    }
+    if (includeNumerics) {
+      passwordChars.add(numerics[rng.nextInt(numerics.length)]);
+    }
+    if (includeSymbols) {
+      passwordChars.add(symbols[rng.nextInt(symbols.length)]);
+    }
+
+    int remainingLength = length - passwordChars.length;
+
+    for (var j = 0; j < remainingLength; j++) {
+      passwordChars.add(finalCase[rng.nextInt(finalCase.length)]);
+    }
+
+    passwordChars.shuffle(rng);
+
+    retValue.add(passwordChars.join(''));
   }
   return retValue;
 }

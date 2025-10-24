@@ -1,5 +1,9 @@
-import 'package:dev_utils/uuid_generator.dart';
+import 'package:dev_utils/password_generator.dart';
 
 void main(List<String> arguments) {
-  print(uuidGenerator(generateCount: 2, uppercase: true, hyphens: false));
+  try {
+    print(passwordGenerator(length: 5, generateCount: 5));
+  } catch (e) {
+    print(e);
+  }
 }
