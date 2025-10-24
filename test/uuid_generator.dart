@@ -1,4 +1,4 @@
-import 'package:dev_utils/uuid_generator.dart';
+import 'package:dev_utils/generators/uuid_generator.dart';
 import 'package:test/test.dart';
 
 // Test edilecek fonksiyonları ve enum'u içe aktar
