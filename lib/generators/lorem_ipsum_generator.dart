@@ -1,213 +1,74 @@
 import 'dart:math';
 
 import 'package:dev_utils/extensions/to_upper_first_letter.dart';
+import 'package:dev_utils/lorem_data/language_types.dart';
+import 'package:dev_utils/lorem_data/lorem_data.dart';
 
-const List<String> _loremWords = [
-  'lorem',
-  'ipsum',
-  'dolor',
-  'sit',
-  'amet',
-  'consectetur',
-  'adipiscing',
-  'elit',
-  'praesent',
-  'interdum',
-  'dictum',
-  'mi',
-  'non',
-  'egestas',
-  'pellentesque',
-  'vel',
-  'enim',
-  'viverra',
-  'turpis',
-  'lacus',
-  'sed',
-  'consequat',
-  'erat',
-  'laoreet',
-  'et',
-  'leo',
-  'curabitur',
-  'in',
-  'gravida',
-  'libero',
-  'ut',
-  'cursus',
-  'malesuada',
-  'luctus',
-  'dui',
-  'fusce',
-  'viverra',
-  'mollis',
-  'nulla',
-  'semper',
-  'blandit',
-  'nunc',
-  'mauris',
-  'vestibulum',
-  'ad',
-  'ultricies',
-  'porttitor',
-  'iaculis',
-  'nibh',
-  'tincidunt',
-  'tellus',
-  'eu',
-  'molestie',
-  'orci',
-  'phasellus',
-  'ultrices',
-  'lacinia',
-  'arcu',
-  'aliquam',
-  'erat',
-  'volutpat',
-  'duis',
-  'ac',
-  'risus',
-  'dignissim',
-  'sapien',
-  'quis',
-  'lobortis',
-  'justo',
-  'nullam',
-  'purus',
-  'scelerisque',
-  'eget',
-  'varius',
-  'facilisis',
-  'suspendisse',
-  'potenti',
-  'aenean',
-  'convallis',
-  'magna',
-  'quisque',
-  'commodo',
-  'accumsan',
-  'nisl',
-  'cras',
-  'euismod',
-  'augue',
-  'sit',
-  'amet',
-  'sem',
-  'nec',
-  'sagittis',
-  'diam',
-  'fermentum',
-  'etiam',
-  'hendrerit',
-  'tortor',
-  'vitae',
-  'posuere',
-  'imperdiet',
-  'massa',
-  'urna',
-  'faucibus',
-  'orci',
-  'nulla',
-  'facilisi',
-  'nam',
-  'sodales',
-  'velit',
-  'non',
-  'feugiat',
-  'donec',
-  'suscipit',
-  'metus',
-  'id',
-  'ante',
-  'morbi',
-  'elementum',
-  'quam',
-  'finibus',
-  'lectus',
-  'maecenas',
-  'tempor',
-  'ex',
-  'a',
-  'ultrices',
-  'bibendum',
-  'odio',
-  'ligula',
-  'sollicitudin',
-  'rutrum',
-  'mollis',
-  'ante',
-  'integer',
-  'eros',
-  'neque',
-  'vulputate',
-  'placerat',
-  'pulvinar',
-  'at',
-  'tristique',
-  'felis',
-  'proin',
-  'non',
-  'semper',
-  'erat',
-  'vivamus',
-  'nisi',
-  'aliquet',
-  'maximus',
-  'mattis',
-  'pretium',
-  'fringilla',
-  'primis',
-  'in',
-  'faucibus',
-  'orci',
-  'luctus',
-  'et',
-  'ultrices',
-  'posuere',
-  'cubilia',
-  'curae',
-  'aenean',
-  'efficitur',
-  'porta',
-  'quam',
-];
-
-const String _standardLoremParagraph =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-    'Praesent interdum dictum mi non egestas. Pellentesque vel enim viverra, '
-    'turpis lacus sed, consequat erat. Laoreet et leo. Curabitur in gravida libero, '
-    'ut cursus malesuada. Luctus dui. Fusce viverra mollis nulla, semper blandit nunc. '
-    'Mauris vestibulum, ad ultricies porttitor, iaculis nibh. Tincidunt tellus eu molestie orci. '
-    'Phasellus ultrices lacinia arcu, aliquam erat volutpat.';
-
-/// Lorem Ipsum paragraph or word generator.
+/// Generates a string of lorem ipsum paragraphs.
 ///
-/// [numParagraphs] Created Paragraph Count.
-/// [minSentencesPerParagraph] Min Word Count Per Paragraph.
-/// [maxSentencesPerParagraph] Max Word Count Per Paragraph.
-/// [minWordsPerSentence] Min Word Count Per Sentence.
-/// [maxWordsPerSentence] Max Word Count Per Sentence.
-/// [startWithLorem] If True Start With Standart Lorem Paragraph
-/// "Lorem ipsum dolor sit amet..." Standart Paragraph
+/// [paragraphCount] is the number of paragraphs to generate.
+///
+/// [minSentencesPerParagraph] is the minimum number of sentences per paragraph.
+///
+/// [maxSentencesPerParagraph] is the maximum number of sentences per paragraph.
+///
+/// [minWordsPerSentence] is the minimum number of words per sentence.
+///
+/// [maxWordsPerSentence] is the maximum number of words per sentence.
+///
+/// [startWithStandart] if true, the first paragraph will be the standard 'Lorem ipsum...' text.
+///
+/// [languageType] specifies the language of the generated text. Defaults to [LoremLanguageType.latin].
 String loremParagraphGenerator({
-  int numParagraphs = 3,
+  int paragraphCount = 3,
   int minSentencesPerParagraph = 3,
   int maxSentencesPerParagraph = 7,
   int minWordsPerSentence = 5,
   int maxWordsPerSentence = 12,
-  bool startWithLorem = true,
+  bool startWithStandart = true,
+  LoremLanguageType? languageType = LoremLanguageType.latin,
 }) {
   final rng = Random();
-
   final paragraphs = <String>[];
+  int generatedParagraphs = paragraphCount;
 
-  int generatedParagraphs = numParagraphs;
+  String loremParagraph;
+  List<String> loremWords;
 
-  if (startWithLorem && numParagraphs > 0) {
-    paragraphs.add(_standardLoremParagraph);
+  switch (languageType) {
+    case LoremLanguageType.latin:
+      loremParagraph = latinStandardParagraph;
+      loremWords = latinLoremWords;
+      break;
+    case LoremLanguageType.turkish:
+      loremParagraph = turkishStandardParagraph;
+      loremWords = turkishLoremWords;
+      break;
+    case LoremLanguageType.german:
+      loremParagraph = germanStandardParagraph;
+      loremWords = germanLoremWords;
+      break;
+    case LoremLanguageType.spanish:
+      loremParagraph = spanishStandardParagraph;
+      loremWords = spanishLoremWords;
+      break;
+    case LoremLanguageType.russian:
+      loremParagraph = russianStandardParagraph;
+      loremWords = russianLoremWords;
+      break;
+    case null:
+    // ignore: unreachable_switch_default
+    default:
+      loremParagraph = latinStandardParagraph;
+      loremWords = latinLoremWords;
+  }
+
+  if (startWithStandart && paragraphCount > 0) {
+    paragraphs.add(loremParagraph);
     generatedParagraphs--;
   }
 
+  // Kalan paragrafları oluştur
   for (int i = 0; i < generatedParagraphs; i++) {
     final sentences = <String>[];
     final numSentences =
@@ -221,7 +82,7 @@ String loremParagraphGenerator({
           rng.nextInt(maxWordsPerSentence - minWordsPerSentence + 1);
 
       for (int x = 0; x < numWords; x++) {
-        words.add(_loremWords[rng.nextInt(_loremWords.length)]);
+        words.add(loremWords[rng.nextInt(loremWords.length)]);
       }
 
       String sentence = words.join(' ');
@@ -234,29 +95,74 @@ String loremParagraphGenerator({
   return paragraphs.join('\n\n');
 }
 
-String loremWordGenerator({int wordCount = 5, bool startWithLorem = false}) {
+/// Generates a string of lorem ipsum words.
+///
+/// [wordCount] is the number of words to generate.
+///
+/// [startWithStandart] if true, the text will start with the standard 'Lorem ipsum dolor sit amet...'.
+/// Throws an [ArgumentError] if [wordCount] is less than the number of standard starting words for the selected language.
+///
+/// [languageType] specifies the language of the generated text. Defaults to [LoremLanguageType.latin].
+String loremWordGenerator({
+  int wordCount = 5,
+  bool startWithStandart = false,
+  LoremLanguageType? languageType = LoremLanguageType.latin,
+}) {
   final worldList = <String>[];
   final rng = Random();
 
   int generatedWord = wordCount;
 
-  if (wordCount < 5 && startWithLorem) {
-    throw ArgumentError(
-      "Word Count Lower 5 Cant Start With Standart Lorem Words",
-    );
+  List<String> loremWords;
+  List<String> standartStartWords;
+
+  // Dil verilerini ata
+  switch (languageType) {
+    case LoremLanguageType.latin:
+      loremWords = latinLoremWords;
+      standartStartWords = latinStandardWords;
+      break;
+    case LoremLanguageType.turkish:
+      loremWords = turkishLoremWords;
+      standartStartWords = turkishStandardWords;
+      break;
+    case LoremLanguageType.german:
+      loremWords = germanLoremWords;
+      standartStartWords = germanStandardWords;
+      break;
+    case LoremLanguageType.spanish:
+      loremWords = spanishLoremWords;
+      standartStartWords = spanishStandardWords;
+      break;
+    case LoremLanguageType.russian:
+      loremWords = russianLoremWords;
+      standartStartWords = russianStandardWords;
+      break;
+    case null:
+    // ignore: unreachable_switch_default
+    default:
+      loremWords = latinLoremWords;
+      standartStartWords = latinStandardWords;
   }
 
-  if (wordCount > 5 && startWithLorem) {
-    worldList.add("Lorem");
-    worldList.add("ipsum");
-    worldList.add("dolor");
-    worldList.add("sit");
-    worldList.add("amet.");
-    generatedWord -= 5;
+  final standardWordCount = standartStartWords.length;
+
+  if (startWithStandart) {
+    // 1. Hata Kontrolü (Aynı kalıyor)
+    if (wordCount < standardWordCount) {
+      throw ArgumentError(
+        "Word Count ($wordCount) is lower than standard start words count ($standardWordCount) for $languageType",
+      );
+    }
+
+    if (wordCount >= standardWordCount) {
+      worldList.addAll(standartStartWords);
+      generatedWord -= standardWordCount;
+    }
   }
 
   for (int i = 0; i < generatedWord; i++) {
-    worldList.add(_loremWords[rng.nextInt(_loremWords.length)]);
+    worldList.add(loremWords[rng.nextInt(loremWords.length)]);
   }
 
   return "${worldList.join(' ')}.";

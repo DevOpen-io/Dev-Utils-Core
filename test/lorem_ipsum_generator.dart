@@ -34,8 +34,8 @@ void main() {
       'startWithLorem: false ayarlandığında, standart paragrafı içermemeli',
       () {
         final result = loremParagraphGenerator(
-          startWithLorem: false,
-          numParagraphs: 1,
+          startWithStandart: false,
+          paragraphCount: 1,
         );
         final paragraphs = result.split('\n\n');
 
@@ -49,7 +49,7 @@ void main() {
     );
 
     test('numParagraphs: 0 ayarlandığında boş string döndürmeli', () {
-      final result = loremParagraphGenerator(numParagraphs: 0);
+      final result = loremParagraphGenerator(paragraphCount: 0);
       expect(result, '');
     });
 
@@ -57,8 +57,8 @@ void main() {
       'startWithLorem: true ve numParagraphs: 5, toplam 5 paragraf döndürmeli',
       () {
         final result = loremParagraphGenerator(
-          numParagraphs: 5,
-          startWithLorem: true,
+          paragraphCount: 5,
+          startWithStandart: true,
         );
         final paragraphs = result.split('\n\n');
         expect(paragraphs.length, 5);
@@ -69,8 +69,8 @@ void main() {
       'Cümleler büyük harf ile başlamalı (toUpperFirstLetter test ediliyor)',
       () {
         final result = loremParagraphGenerator(
-          startWithLorem: false, // Rastgele paragrafı test etmek için
-          numParagraphs: 1,
+          startWithStandart: false, // Rastgele paragrafı test etmek için
+          paragraphCount: 1,
         );
 
         // 'toUpperFirstLetter()' eklentinizin çalıştığını varsayarak
@@ -92,8 +92,8 @@ void main() {
 
     test('Cümle sayısı belirtilen aralıkta olmalı', () {
       final result = loremParagraphGenerator(
-        startWithLorem: false,
-        numParagraphs: 1,
+        startWithStandart: false,
+        paragraphCount: 1,
         minSentencesPerParagraph: 2, // Min ve Max aynı
         maxSentencesPerParagraph: 2, //
       );
@@ -121,10 +121,13 @@ void main() {
     test(
       'startWithLorem: true ve wordCount: 10, ilk 5 standart kelime + 5 rastgele kelime döndürmeli',
       () {
-        final result = loremWordGenerator(wordCount: 10, startWithLorem: true);
+        final result = loremWordGenerator(
+          wordCount: 10,
+          startWithStandart: true,
+        );
 
         // 1. Doğru metinle başladığını kontrol et (kodunuzdaki "amet." dahil)
-        expect(result.startsWith('Lorem ipsum dolor sit amet.'), isTrue);
+        expect(result.startsWith('Lorem ipsum dolor sit amet'), isTrue);
 
         // 2. Toplam kelime sayısını kontrol et
         // Kodunuzdaki mantık: "Lorem ipsum dolor sit amet. word6 word7 word8 word9 word10."
@@ -139,24 +142,10 @@ void main() {
     );
 
     test(
-      'startWithLorem: true ve wordCount: 5, 5 RASTGELE kelime döndürmeli (kenar durum)',
-      () {
-        // Kodunuzdaki mantık (if wordCount > 5) nedeniyle,
-        // wordCount == 5 ve startWithLorem == true ise, 5 rastgele kelime üretir.
-        final result = loremWordGenerator(wordCount: 5, startWithLorem: true);
-        final words = result.substring(0, result.length - 1).split(' ');
-
-        expect(words.length, 5);
-        // Standart kelimelerle başlamadığını varsayıyoruz (olasılık çok düşük)
-        expect(result.startsWith('Lorem ipsum'), isFalse);
-      },
-    );
-
-    test(
       'wordCount < 5 ve startWithLorem: true ise ArgumentError fırlatmalı',
       () {
         expect(
-          () => loremWordGenerator(wordCount: 4, startWithLorem: true),
+          () => loremWordGenerator(wordCount: 4, startWithStandart: true),
           throwsA(isA<ArgumentError>()),
         );
       },
@@ -164,8 +153,14 @@ void main() {
 
     test('Her zaman bir nokta ile bitmeli', () {
       final result1 = loremWordGenerator();
-      final result2 = loremWordGenerator(wordCount: 1, startWithLorem: false);
-      final result3 = loremWordGenerator(wordCount: 10, startWithLorem: true);
+      final result2 = loremWordGenerator(
+        wordCount: 1,
+        startWithStandart: false,
+      );
+      final result3 = loremWordGenerator(
+        wordCount: 10,
+        startWithStandart: true,
+      );
 
       expect(result1.endsWith('.'), isTrue);
       expect(result2.endsWith('.'), isTrue);
