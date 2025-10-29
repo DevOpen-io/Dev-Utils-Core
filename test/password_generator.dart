@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 // Test edilecek fonksiyonunuzu içe aktar
 // Bu dosyanın 'lib/password_generator.dart' içinde olduğunu varsayıyorum
-import 'package:dev_utils/generators/password_generator.dart';
+import 'package:dev_utils/generators/password/password_generator.dart';
 
 void main() {
   // Testleri gruplayarak daha okunabilir hale getirelim

@@ -1,5 +1,5 @@
 // Dart'ın test paketini içe aktar
-import 'package:dev_utils/generators/lorem_ipsum_generator.dart';
+import 'package:dev_utils/generators/lorem_ipsum/lorem_ipsum_generator.dart';
 import 'package:test/test.dart';
 
 // Test edilecek fonksiyonları içeren dosyanızı içe aktarın
