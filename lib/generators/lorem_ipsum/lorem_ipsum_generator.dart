@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:dev_utils/extensions/to_upper_first_letter.dart';
-import 'package:dev_utils/lorem_data/language_types.dart';
-import 'package:dev_utils/lorem_data/lorem_data.dart';
+import 'package:dev_utils/generators/lorem_ipsum/lorem_data/language_types.dart';
+import 'package:dev_utils/generators/lorem_ipsum/lorem_data/lorem_data.dart';
 
 /// Generates a string of lorem ipsum paragraphs.
 ///
