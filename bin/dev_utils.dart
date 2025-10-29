@@ -1,14 +1,8 @@
-import 'package:dev_utils/generators/lorem_ipsum_generator.dart';
-import 'package:dev_utils/lorem_data/language_types.dart';
+import 'package:dev_utils/generators/qr/qr_code_generator.dart';
 
 void main(List<String> arguments) {
   try {
-    final result = loremParagraphGenerator(
-      paragraphCount: 2,
-      startWithStandart: true,
-      languageType: LoremLanguageType.turkish,
-    );
-    print(result);
+    print(qrCodeGenerator(qrData: "Hello, World!" , saveAsFile: true));
   } catch (e) {
     print(e);
   }
